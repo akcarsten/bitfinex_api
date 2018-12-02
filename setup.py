@@ -1,10 +1,10 @@
 from setuptools import setup
 
 setup(
-    name='bitfinex_api',
+    name='bitfinex',
     version='1.0',
-    packages=[''],
-    url='https://github.com/akcarsten/bitfinex_api',
+    packages=['bitfinex'],
+    url='https://github.com/akcarsten/bitfinex',
     license='',
     author='Carsten Klein',
     author_email='https://www.linkedin.com/in/carsten-klein/',
