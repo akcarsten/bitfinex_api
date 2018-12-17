@@ -1,7 +1,7 @@
 # Python Bitfinex API client
 
 ---
-This is a simple Python client for the Bitfinex REST API (v1 and v2). It supports public as well as private endpoints.
+This is a simple Python client for the Bitfinex REST API (V1 and V2). It supports public as well as private endpoints.
 
 ---
 ## Installation
@@ -23,7 +23,7 @@ Now you can run Python and import the Bitfinex client.
 ---
 ## Examples of how to use the interface
 
-### Public endpoints 
+### Public endpoints
 Public endpoints can be used without entering any keys as shown in the examples below.
 
 #### Example 1: Retrieving current tick data
@@ -31,7 +31,7 @@ Public endpoints can be used without entering any keys as shown in the examples 
 import bitfinex
 
 # Initialize the api
-api = bitfinex.api()
+api = bitfinex.api_v1()
 
 # Select a trading pair
 pair = 'btcusd'
@@ -45,16 +45,16 @@ api.ticker(pair)
 import bitfinex
 
 # Initialize the api
-api = bitfinex.api()
+api = bitfinex.api_v1()
 
 # Get all available currency pairs
 symbols = api.symbols()
 ```
-    
+
 All available public endpoints are included in this client. For a full documentation check the Bitfinex API [webpage](
 https://docs.bitfinex.com/docs/public-endpoints)
-  
-### Private endpoints 
+
+### Private endpoints
 In order to use private endpoints the public- and secrete keys need to be provided while initializing the API as shown in the example below in which the current account balance can be retrieved.
 
 #### Example 1: Check account balance
@@ -64,7 +64,7 @@ import bitfinex
 key = 'YOUR_PUBLIC_KEY'
 secrete = 'YOUR_SECRETE_KEY'
 
-api = bitfinex.api(key, secrete) 
+api = bitfinex.api_v1(key, secrete)
 my_balance = api_bitfinex.balance()
 ```
 
@@ -85,6 +85,8 @@ api.place_order(symbol, amount, price, side, type)
 ---
 ## Further information
 
-For a full documentation of all API commands and what parameters are needed to run them check out the Bitfinex API documentation for [public endpoints](https://docs.bitfinex.com/docs/public-endpoints) and the documentation for the [private endpoints](https://docs.bitfinex.com/docs/rest-auth).
+For a full documentation of all API commands and what parameters are needed to run them, check out the Bitfinex API documentation for [public endpoints](https://docs.bitfinex.com/docs/public-endpoints) and the documentation for the [private endpoints](https://docs.bitfinex.com/docs/rest-auth) of the V1 API.
 
-All endpoints should be included in this API. In case of changes or bugs please let me know. 
+For the V2 API you can find the reference [here](https://docs.bitfinex.com/v2/reference).
+
+All endpoints should be included in this API. In case of changes or bugs please let me know.

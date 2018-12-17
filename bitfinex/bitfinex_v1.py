@@ -5,7 +5,7 @@ import json
 import hmac
 import hashlib
 
-class api(object):
+class api_v1(object):
     __api_url = 'https://api.bitfinex.com'
     __api_key = ''
     __api_secret = ''
@@ -72,10 +72,6 @@ class api(object):
 
     def ticker(self, symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v1/pubticker/{}'.format(symbol)).json()
-
-    def candles(self, symbol='BTCUSD', interval='1m', limit=1000, sort=-1):
-        return requests.get('https://api.bitfinex.com/v2/candles/trade:{}:t{}/hist?limit={}&sort={}'
-                            .format(interval, symbol, limit, sort)).json()
 
     # Private endpoints
     def account_infos(self):
