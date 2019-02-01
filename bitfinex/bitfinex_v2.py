@@ -1,9 +1,9 @@
 import time
-import base64
 import requests
 import json
 import hmac
 import hashlib
+
 
 class api_v2(object):
     _api_url = 'https://api.bitfinex.com'
@@ -20,7 +20,8 @@ class api_v2(object):
             self._api_secret = api_secret
 
     # create nonce
-    def _nonce(self):
+    @staticmethod
+    def _nonce():
         return str(int(round(time.time() * 1000)))
 
     def _headers(self, path, nonce, body):
@@ -42,39 +43,46 @@ class api_v2(object):
     def api_call(self, method, param={}):
         url = self._api_url + method
         nonce = self._nonce()
-        rawBody = json.dumps(param)
-        headers = self._headers(method, nonce, rawBody)
+        raw_body = json.dumps(param)
+        headers = self._headers(method, nonce, raw_body)
 
-        #return requests.post(url, data={}, headers=headers)
-        return requests.post(url, headers=headers, data=rawBody, verify=True)
+        # return requests.post(url, data={}, headers=headers)
+        return requests.post(url, headers=headers, data=raw_body, verify=True)
 
     # Public endpoints
-    def tickers(self, symbol='btcusd'):
+    @staticmethod
+    def tickers(symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v2/tickers?symbols=t{}'.
                             format(symbol.upper())).json()
 
-    def ticker(self, symbol='btcusd'):
+    @staticmethod
+    def ticker(symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v2/ticker/t{}'.
                             format(symbol.upper())).json()
 
-    def trades(self, symbols='btcusd', limit=1000, start=None, end=None, sort=-1):
+    @staticmethod
+    def trades(symbols='btcusd', limit=1000, start=None, end=None, sort=-1):
         return requests.get('https://api.bitfinex.com/v2/trades/t{}/hist?limit={}&start={}&end={}&sort=-1'.
                             format(symbols.upper(), limit, start, end, sort)).json()
 
-    def books(self, symbol='btcusd', precision='P0', length=100):
+    @staticmethod
+    def books(symbol='btcusd', precision='P0', length=100):
         return requests.get('https://api.bitfinex.com/v2/book/t{}/{}?len={}'.
                             format(symbol.upper(), precision, length)).json()
 
-    def stats(self, key='funding.size', size='1m', symbol='usd', sort=-1):
+    @staticmethod
+    def stats(key='funding.size', size='1m', symbol='usd', sort=-1):
         return requests.get('https://api.bitfinex.com/v2/stats1/{}:{}:f{}/hist?sort={}'.
                             format(key, size, symbol.upper(), sort)).json()
 
-    def candles(self, symbol='btcusd', interval='1m', limit=1000, start=None, end=None, sort=-1):
+    @staticmethod
+    def candles(symbol='btcusd', interval='1m', limit=1000, start=None, end=None, sort=-1):
         return requests.get('https://api.bitfinex.com/v2/candles/trade:{}:t{}/hist?limit={}&start={}&end={}&sort=-1'.
                             format(interval, symbol.upper(), limit, start, end, sort)).json()
 
     # REST calculation endpoints
-    def market_average_price(self, symbol='btcusd', amount=1.123, period='', rate_limit=''):
+    @staticmethod
+    def market_average_price(symbol='btcusd', amount=1.123, period='', rate_limit=''):
         url = 'https://api.bitfinex.com/v2/calc/trade/avg'
         querystring = {'symbol': 't'+str(symbol).upper(),
                        'amount': str(amount),
@@ -82,7 +90,8 @@ class api_v2(object):
                        'rate_limit': str(rate_limit)}
         return requests.request('POST', url, params=querystring).json()
 
-    def forex(self, ccy1='eur', ccy2='usd'):
+    @staticmethod
+    def forex(ccy1='eur', ccy2='usd'):
         url = 'https://api.bitfinex.com/v2/calc/fx'
         querystring = {'ccy1': ccy1.upper(),
                        'ccy2': ccy2.upper()}
@@ -102,13 +111,6 @@ class api_v2(object):
 
     def order_trades(self, symbol='btcusd', order_id=''):
         return self.api_call('/v2/auth/r/order/t{}:{}/trades'.format(symbol.upper(), order_id), {}).json()
-
-    def orders(self, symbol='btcusd', start=1545079680000, end=1545019080000, limit=25):
-        querystring = {'symbol': 't'+str(symbol).upper(),
-                       'start': str(start),
-                       'end': str(end),
-                       'limit': str(limit)}
-        return self.api_call('/v2/auth/r/trades/t{}/hist'.format(symbol.upper()), querystring).json()
 
     def positions(self):
         return self.api_call('/v2/auth/r/positions', {}).json()
@@ -159,28 +161,28 @@ class api_v2(object):
     def movements(self, currency='btc'):
         return self.api_call('/v2/auth/r/movements/{}/hist'.format(currency.upper()), {}).json()
 
-    def alerts(self, type='price'):
-        querystring = {'type': type}
+    def alerts(self, alert_type='price'):
+        querystring = {'type': alert_type}
         return self.api_call('/v2/auth/r/alerts', querystring).json()
 
-    def alert_set(self, type='price', symbol='btc', price=1000):
-        querystring = {'type': type,
+    def alert_set(self, alert_type='price', symbol='btc', price=1000.0):
+        querystring = {'type': alert_type,
                        'symbol': symbol.upper(),
                        'price': str(price)}
         return self.api_call('/v2/auth/w/alert/set', querystring).json()
 
-    def alert_delete(self, symbol='btc', price=1000):
-        return self.api_call('/v2/auth/w/alert/price:t{}:{}/del'.format(symbol.upper(), price),{}).json()
+    def alert_delete(self, symbol='btc', price=1000.0):
+        return self.api_call('/v2/auth/w/alert/price:t{}:{}/del'.format(symbol.upper(), price), {}).json()
 
-    def calc_available_balance(self, symbol='btcusd', dir=1, rate=1, type='EXCHANGE'):
+    def calc_available_balance(self, symbol='btcusd', direction=1, rate=1, order_type='EXCHANGE'):
         querystring = {'symbol': 't'+str(symbol).upper(),
-                       'dir': str(dir),
+                       'dir': str(direction),
                        'rate': str(rate),
-                       'type': type.upper()}
+                       'type': order_type.upper()}
         return self.api_call('/v2/auth/calc/order/avail/', querystring).json()
 
     def ledgers(self, currency='btc'):
-        return self.api_call('/v2/auth/r/ledgers/{}/hist'.format(currency.upper()),{}).json()
+        return self.api_call('/v2/auth/r/ledgers/{}/hist'.format(currency.upper()), {}).json()
 
     def user_settings_read(self, params={}):
         return self.api_call('/v2/auth/r/settings', params).json()

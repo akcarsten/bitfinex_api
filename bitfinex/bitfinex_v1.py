@@ -5,6 +5,7 @@ import json
 import hmac
 import hashlib
 
+
 class api_v1(object):
     __api_url = 'https://api.bitfinex.com'
     __api_key = ''
@@ -29,48 +30,56 @@ class api_v1(object):
 
         self.__nonce()
 
-        payloadObject = {
-                'request':method,
-                'nonce':self.__api_nonce,
+        payload_object = {
+                'request': method,
+                'nonce': self.__api_nonce,
                 }
-        payloadObject.update(param)
+        payload_object.update(param)
 
-        payload_json = json.dumps(payloadObject)
+        payload_json = json.dumps(payload_object)
         payload = base64.b64encode(bytes(payload_json, "utf-8"))
 
         signature = hmac.new(self.__api_secret.encode('utf-8'), payload, hashlib.sha384).hexdigest().lower()
 
-        #headers
+        # Headers
         headers = {
-            'X-BFX-APIKEY' : self.__api_key,
-            'X-BFX-PAYLOAD' : base64.b64encode(bytes(payload_json, "utf-8")),
-            'X-BFX-SIGNATURE' : signature
+            'X-BFX-APIKEY': self.__api_key,
+            'X-BFX-PAYLOAD': base64.b64encode(bytes(payload_json, "utf-8")),
+            'X-BFX-SIGNATURE': signature
         }
         return requests.post(url, data={}, headers=headers)
 
     # Public endpoints
-    def symbols(self):
+    @staticmethod
+    def symbols():
         return requests.get('https://api.bitfinex.com/v1/symbols').json()
 
-    def symbol_details(self):
+    @staticmethod
+    def symbol_details():
         return requests.get('https://api.bitfinex.com/v1/symbols_details').json()
 
-    def lends(self, currency='usd'):
+    @staticmethod
+    def lends(currency='usd'):
         return requests.get('https://api.bitfinex.com/v1/lends/{}'.format(currency)).json()
 
-    def trades(self, symbol='btcusd'):
+    @staticmethod
+    def trades(symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v1/trades/{}'.format(symbol)).json()
 
-    def order_book(self, symbol='btcusd'):
+    @staticmethod
+    def order_book(symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v1/book/{}'.format(symbol)).json()
 
-    def funding_book(self, currency='usd'):
+    @staticmethod
+    def funding_book(currency='usd'):
         return requests.get('https://api.bitfinex.com/v1/lendbook/{}'.format(currency)).json()
 
-    def stats(self, symbol='btcusd'):
+    @staticmethod
+    def stats(symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v1/stats/{}'.format(symbol)).json()
 
-    def ticker(self, symbol='btcusd'):
+    @staticmethod
+    def ticker(symbol='btcusd'):
         return requests.get('https://api.bitfinex.com/v1/pubticker/{}'.format(symbol)).json()
 
     # Private endpoints
@@ -85,9 +94,9 @@ class api_v1(object):
 
     def deposits(self, method, wallet_name, renew):
         param = {
-        'method': method,
-        'wallet_name': wallet_name,
-        'renew': renew
+            'method': method,
+            'wallet_name': wallet_name,
+            'renew': renew
         }
         return self.api_call('/v1/deposit/new', param=param).json()
 
@@ -99,19 +108,19 @@ class api_v1(object):
 
     def transfer(self, amount, currency, walletfrom, walletto):
         param = {
-        'amount': amount,
-        'currency': currency,
-        'walletfrom': walletfrom,
-        'walletto': walletto
+            'amount': amount,
+            'currency': currency,
+            'walletfrom': walletfrom,
+            'walletto': walletto
         }
         return self.api_call('/v1/transfer', param=param).json()
 
     def withdraw(self, withdraw_type, walletselected, amount, address):
         param = {
-        'withdraw_type': withdraw_type,
-        'walletselected': walletselected,
-        'amount': amount,
-        'address': address
+            'withdraw_type': withdraw_type,
+            'walletselected': walletselected,
+            'amount': amount,
+            'address': address
         }
         return self.api_call('/v1/withdraw', param=param).json()
 
@@ -124,39 +133,39 @@ class api_v1(object):
     def order_history(self):
         return self.api_call('/v1/orders/hist', {}).json()
 
-    def place_order(self, symbol, amount, price, side, type):
+    def place_order(self, symbol, amount, price, side, order_type):
         param = {
-        'symbol': symbol,
-        'amount': amount,
-        'price': price,
-        'exchange': 'exchange_apis',
-        'side': side,
-        'type': type
+            'symbol': symbol,
+            'amount': amount,
+            'price': price,
+            'exchange': 'bitfinex',
+            'side': side,
+            'type': order_type
         }
         return self.api_call('/v1/order/new', param=param).json()
 
-    def cancel_order(self, id):
-        param={'id': id}
+    def cancel_order(self, order_id):
+        param = {'order_id': order_id}
         return self.api_call('/v1/order/cancel', param=param).json()
 
     def cancel_all(self):
         return self.api_call('/v1/order/cancel/all', {}).json()
 
-    def order_status(self, id):
-        param={'id': id}
+    def order_status(self, order_id):
+        param = {'order_id': order_id}
         return self.api_call('/v1/order/status', param=param).json()
 
-    def cancel_all(self):
+    def position(self):
         return self.api_call('/v1/positions', {}).json()
 
     def balance_history(self, currency):
-        param={'currency': currency}
-        return self.api_call('/v1/history', {}).json()
+        param = {'currency': currency}
+        return self.api_call('/v1/history', param=param).json()
 
     def movements(self, currency):
-        param={'currency': currency}
-        return self.api_call('/v1/history/movements', {}).json()
+        param = {'currency': currency}
+        return self.api_call('/v1/history/movements', param=param).json()
 
     def mytrades(self, currency):
-        param={'currency': currency}
-        return self.api_call('/v1/mytrades', {}).json()
+        param = {'currency': currency}
+        return self.api_call('/v1/mytrades', param=param).json()
