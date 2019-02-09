@@ -1,12 +1,11 @@
-from setuptools import setup
+import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setup(
+setuptools.setup()(
     name='bitfinex-tencars',
     version='1.3',
-    packages=['bitfinex'],
     url='https://github.com/akcarsten/bitfinex',
     license='',
     author='Carsten Klein',
