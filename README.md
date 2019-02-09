@@ -6,13 +6,19 @@ This is a simple Python client for the Bitfinex REST API (V1 and V2). It support
 ---
 ## Installation
 
-You can either clone the repository directly from the Github webpage or run the following command in your terminal:
+You can either clone the repository directly from the Github webpage or run the following command(s) in your terminal:
 
+Pip Installation:
+```
+pip install bitfinex-tencars
+```
+
+Alternatively you can clone the Git repository:
 ```
 git clone https://github.com/akcarsten/bitfinex_api.git
 ```
 
-Then go to the folder where you cloned the repository and run:
+Then go to the folder to which you cloned the repository and run:
 
 ```
 python setup.py install
