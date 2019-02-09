@@ -3,13 +3,14 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setuptools.setup()(
+with open("requirements.txt", "r") as fh:
+    requirements = fh.read().splitlines()
+
+setuptools.setup(
     name='bitfinex-tencars',
-    version='1.3',
+    version='1.30.0',
     url='https://github.com/akcarsten/bitfinex',
-    license='',
     author='Carsten Klein',
-    author_email='https://www.linkedin.com/in/carsten-klein/',
     description='Bitfinex REST API client',
     long_description=long_description,
     long_description_content_type="text/markdown",
