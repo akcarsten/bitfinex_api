@@ -2,6 +2,7 @@
 
 ---
 This is a simple Python client for the Bitfinex REST API (V1 and V2). It supports public as well as private endpoints.
+An example on how to use this tool to gather historical bitcoin data is documented in [this article.](https://medium.com/coinmonks/how-to-get-historical-crypto-currency-data-954062d40d2d)
 
 ---
 ## Installation
@@ -30,7 +31,7 @@ Now you can run Python and import the Bitfinex client.
 ## Examples of how to use the interface
 
 ### Public endpoints
-Public endpoints can be used without entering any keys as shown in the examples below.
+Public endpoints can be used without providing any keys as shown in the examples below.
 
 #### Example 1: Retrieving current tick data
 ```python
@@ -57,7 +58,7 @@ api = bitfinex.api_v1()
 symbols = api.symbols()
 ```
 
-All available public endpoints are included in this client. For a full documentation check the Bitfinex API [webpage](
+All available public endpoints are included in this client. For a full documentation check the Bitfinex API [webpage.](
 https://docs.bitfinex.com/docs/public-endpoints)
 
 ### Private endpoints
@@ -74,7 +75,7 @@ api = bitfinex.api_v1(key, secrete)
 my_balance = api_bitfinex.balance()
 ```
 
-#### Example 2: Place an buy order
+#### Example 2: Place a buy order
 ```python
 import bitfinex
 
