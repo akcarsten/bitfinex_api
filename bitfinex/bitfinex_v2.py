@@ -77,7 +77,7 @@ class api_v2(object):
 
     @staticmethod
     def candles(symbol='btcusd', interval='1m', limit=1000, start=None, end=None, sort=-1):
-        return requests.get('https://api.bitfinex.com/v2/candles/trade:{}:t{}/hist?limit={}&start={}&end={}&sort=-1'.
+        return requests.get('https://api.bitfinex.com/v2/candles/trade:{}:t{}/hist?limit={}&start={}&end={}&sort={}'.
                             format(interval, symbol.upper(), limit, start, end, sort)).json()
 
     # REST calculation endpoints
