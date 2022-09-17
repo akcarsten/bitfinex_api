@@ -62,7 +62,7 @@ class api_v2(object):
 
     @staticmethod
     def trades(symbols='btcusd', limit=1000, start=None, end=None, sort=-1):
-        return requests.get('https://api.bitfinex.com/v2/trades/t{}/hist?limit={}&start={}&end={}&sort=-1'.
+        return requests.get('https://api.bitfinex.com/v2/trades/t{}/hist?limit={}&start={}&end={}&sort={}'.
                             format(symbols.upper(), limit, start, end, sort)).json()
 
     @staticmethod
