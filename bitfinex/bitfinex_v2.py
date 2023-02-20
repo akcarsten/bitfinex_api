@@ -52,8 +52,12 @@ class api_v2(object):
     # Public endpoints
     @staticmethod
     def tickers(symbol='btcusd'):
-        return requests.get('https://api.bitfinex.com/v2/tickers?symbols=t{}'.
-                            format(symbol.upper())).json()
+        if type(symbol) is str:
+            symbols = 't{}'.format(symbol.upper())
+        else:
+            symbols = ','.join(['t{}'.format(s.upper()) for s in symbol])
+        return requests.get('https://api.bitfinex.com/v2/tickers?symbols={}'.
+                            format(symbols)).json()
 
     @staticmethod
     def ticker(symbol='btcusd'):
