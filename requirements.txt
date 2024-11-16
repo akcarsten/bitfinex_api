@@ -1,4 +1,4 @@
 numpy==1.22.0
 requests==2.20.0
-pandas==0.22.0
+pandas==2.2.3
 setuptools==38.4.0
